@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Photorealistic Monocular 3D Reconstruction of Humans Wearing Clothing</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css?v=2">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script type="module"
+          src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script type="text/javascript" id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            Photorealistic Monocular 3D Reconstruction of Humans Wearing Clothing
+            <div class="is-size-3 has-text-grey p-4">CVPR 2022</div>
+          </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=tJlD24EAAAAJ" target="_blank">Thiemo Alldieck</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=af68sKkAAAAJ" target="_blank">Mihai Zanfir</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=LHTI1W8AAAAJ" target="_blank">Cristian Sminchisescu</a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Google Research</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="/static/assets/alldieck2022phorhum.pdf" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark" disabled>
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=mU16oKt_U_k" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero p-6">
+  <div class="container is-max-desktop has-text-centered">
+    <figure class="image">
+      <img src="/static/images/teaser.png">
+    </figure>
+    <p class="is-light p-3">Given a single image, we reconstruct the full 3D geometry
+      – including self-occluded (or unseen) regions – of the photographed person, together with
+      albedo and shaded surface color.
+      Our end-to-end trainable pipeline requires no image matting and
+      reconstructs all outputs in a single step.</p>
+  </div>
+</section>
+
+
+<section class="hero is-light p-6">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-10-desktop is-12-tablet">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            We present PHORHUM, a novel, end-to-end trainable, deep neural network methodology for
+            photorealistic 3D human reconstruction given just a monocular RGB image. Our
+            pixel-aligned method estimates detailed 3D geometry and, for the first time, the
+            unshaded surface color together with the scene illumination. Observing that 3D
+            supervision alone is not sufficient for high fidelity color reconstruction, we introduce
+            patch-based rendering losses that enable reliable color reconstruction on visible parts
+            of the human, and detailed and plausible color estimation for the non-visible parts.
+            Moreover, our method specifically addresses methodological and practical limitations of
+            prior work in terms of representing geometry, albedo, and illumination effects, in an
+            end-to-end model where factors can be effectively disentangled. In extensive
+            experiments, we demonstrate the versatility and robustness of our approach. Our
+            state-of-the-art results validate the method qualitatively and for different metrics,
+            for both geometric and color reconstruction.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container">
+    <h2 class="title">Method</h2>
+    <figure class="image">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-10-desktop is-12-tablet">
+          <img src="/static/images/method.png">
+          <p class="is-light p-3">Overview of our method. The feature extractor network
+            \(G\) produces pixel-aligned features \(\boldsymbol{z}_{\boldsymbol{x}}\) from an input image
+            \(\mathbf{I}\) for all points in space \(\boldsymbol{x}\). The implicit signed distance function network
+            \(f\) computes the distance \(d\) to the closest surface given a point and its feature.
+            Additionally \(f\) returns albedo colors \(\boldsymbol{a}\) defined for surface points. The
+            shading network \(s\) predicts the shading for surface points given its surface
+            normal \(\boldsymbol{n}_{\boldsymbol{x}}\), as well as illumination \(\boldsymbol{l}\).
+            On the right we show the reconstruction of geometry and albedo colors, and the shaded 3D geometry.</p>
+        </div>
+      </div>
+    </figure>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <h2 class="title">Video</h2>
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column  is-10-desktop is-12-tablet">
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/mU16oKt_U_k?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <h2 class="title">Results</h2>
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item">
+          <figure class="image is-h300 has-text-centered">
+            <img src="/static/images/video_sample_000.jpg">
+          </figure>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_c_000.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_n_000.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <figure class="image is-h300 has-text-centered">
+            <img src="/static/images/video_sample_001.jpg">
+          </figure>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_c_001.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_n_001.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <figure class="image is-h300 has-text-centered">
+            <img src="/static/images/video_sample_002.png">
+          </figure>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_c_002.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_n_002.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <figure class="image is-h300 has-text-centered">
+            <img src="/static/images/video_sample_003.jpg">
+          </figure>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_c_003.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_n_003.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <figure class="image is-h300 has-text-centered">
+            <img src="/static/images/video_sample_004.png">
+          </figure>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_c_004.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_n_004.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <figure class="image is-h300 has-text-centered">
+            <img src="/static/images/video_sample_005.jpg">
+          </figure>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_c_005.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop class="is-h300">
+            <source src="/static/videos/video_n_005.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="application/javascript">
+    bulmaCarousel.attach('#results-carousel', {
+      slidesToScroll: 3,
+      slidesToShow: 3,
+      loop: true
+    });
+  </script>
+</section>
+<section class="section">
+  <div class="container">
+    <h2 class="title">3D Viewer</h2>
+    <div class="columns is-desktop">
+      <div class="column is-2-desktop is-12-tablet">
+        <figure class="image is-h300 has-text-centered">
+          <img src="/static/images/sample_00.jpg">
+        </figure>
+      </div>
+      <div class="column is-4-desktop is-12-tablet">
+        <div class="content">
+          <model-viewer loading="eager" camera-controls src="/static/models/sample_00.glb">
+          </model-viewer>
+        </div>
+      </div>
+      <div class="column is-2-desktop is-12-tablet">
+        <figure class="image is-h300 has-text-centered">
+          <img src="/static/images/sample_01.jpg">
+        </figure>
+      </div>
+      <div class="column is-4-desktop is-12-tablet">
+        <div class="content">
+          <model-viewer loading="eager" camera-controls src="/static/models/sample_01.glb">
+          </model-viewer>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section" id="BibTeX">
+  <div class="container">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{alldieck2022phorhum,
+  title	  = {Photorealistic Monocular 3D Reconstruction of Humans Wearing Clothing},
+  author  = {Thiemo Alldieck and Mihai Zanfir and Cristian Sminchisescu},
+  year	  = {2022},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <div class="content has-text-centered">
+          <p>
+            This website uses the template provided by <a target="_blank"
+                                                          href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
+            licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
